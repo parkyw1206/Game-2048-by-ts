@@ -1,26 +1,24 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import Header from "./component/Header";
+import AboveGame from "./component/AboveGame";
+import Game from "./component/Game";
+import useLocalStorageNumber from "./hook/useLocalStorage";
 
-function App() {
+export default function App() {
+  const [score, setScore] = useState(0);
+  const [bestScore, setBestScore] = useLocalStorageNumber("bestScore", 0);
+
+  useEffect(() => {
+    if (score > bestScore) {
+      setBestScore(score);
+    }
+  }, [bestScore, score, setBestScore]);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="container">
+      <Header score={score} bestScore={bestScore} />
+      <AboveGame />
+      <Game setScore={(v: number) => setScore(v)} />
     </div>
   );
 }
-
-export default App;
